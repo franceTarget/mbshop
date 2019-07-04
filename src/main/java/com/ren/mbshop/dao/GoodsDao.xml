@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ren.mbshop.dao.GoodsDao">
+	<select id="getGoodsByName" resultType="com.ren.mbshop.pojo.model.Goods">
+		select id,goods_name
+		goodsName,original_reference_price
+		originalReferencePrice,sale_reference_price saleReferencePrice from
+		pa_goods_info where goods_name like
+		CONCAT('%',#{goodsName,jdbcType=VARCHAR},'%')
+	</select>
+
+	<insert id="batchInsertGoods" parameterType="com.ren.mbshop.pojo.model.Goods">
+		INSERT INTO pa_goods_info
+		(id,goods_name,goods_description,goods_category,belonging_to,original_reference_price,sale_reference_price,create_by,create_time)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id},
+			#{item.goodsName},
+			#{item.goodsDescription},
+			#{item.goodsCategory},
+			#{item.belongingTo},
+			#{item.originalReferencePrice},
+			#{item.saleReferencePrice},
+			#{item.createBy},
+			#{item.createTime}
+			)
+		</foreach>
+	</insert>
+
+	<insert id="insertGoods" parameterType="com.ren.mbshop.pojo.model.Goods">
+		INSERT INTO pa_goods_info
+		(id,goods_name,goods_description,goods_category,belonging_to,original_reference_price,sale_reference_price,create_by,create_time)
+		VALUES
+		(
+		#{id},
+		#{goodsName},
+		#{goodsDescription},
+		#{goodsCategory},
+		#{belongingTo},
+		#{originalReferencePrice},
+		#{saleReferencePrice},
+		#{createBy},
+		#{createTime}
+		)
+	</insert>
+
+	<select id="findOneByName" resultType="com.ren.mbshop.pojo.model.Goods">
+		select id,goods_name
+		goodsName,original_reference_price
+		originalReferencePrice,
+		sale_reference_price saleReferencePrice from
+		pa_goods_info where
+		lower(goods_name) =
+		lower(#{goodsName,jdbcType=VARCHAR}) limit 1
+	</select>
+</mapper>
