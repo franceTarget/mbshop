@@ -67,6 +67,7 @@ public class IndexController {
         productResp3.setPrice(2132.98);
         productResp3.setOtPrice(3123.88);
         productResp3.setStoreName("小可爱");
+        productResp3.setStock(4);
         List<ProductResp> benefits = new ArrayList<>();
         benefits.add(productResp3);
 
@@ -89,9 +90,15 @@ public class IndexController {
     }
 
     @GetMapping("/query/likes")
-    public Response<IndexResp> getLikes() {
-        IndexResp indexResp = new IndexResp();
-        return Response.ok("", indexResp);
+    public Response<List<ProductResp>> getLikes() {
+        ProductResp productResp4 = new ProductResp();
+        productResp4.setId("111");
+        productResp4.setImage("../../images/sign-bg.jpg");
+        productResp4.setPrice(2132.98);
+        productResp4.setStoreName("小可爱");
+        List<ProductResp> likes = new ArrayList<>();
+//        likes.add(productResp4);
+        return Response.ok("", likes);
     }
 
 }

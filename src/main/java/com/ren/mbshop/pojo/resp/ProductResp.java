@@ -21,4 +21,7 @@ public class ProductResp {
     @ApiModelProperty("商品原价")
     private Double otPrice;
 
+    @ApiModelProperty("商品剩余数量")
+    private Integer stock;
+
 }
