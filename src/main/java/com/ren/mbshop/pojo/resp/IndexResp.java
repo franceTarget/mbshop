@@ -1,26 +1,36 @@
 package com.ren.mbshop.pojo.resp;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@ApiModel("首页数据")
 @Data
 public class IndexResp {
 
-    private List banners = new ArrayList<>();
+    @ApiModelProperty("横幅")
+    private List<BannerResp> banners;
 
-    private List bests= new ArrayList<>();
+    @ApiModelProperty("精品推荐")
+    private List<ProductResp> bests;
 
-    private List news= new ArrayList<>();
+    @ApiModelProperty("首发新品")
+    private List<ProductResp> news;
 
-    private List hots= new ArrayList<>();
+    @ApiModelProperty("热卖单品")
+    private List<ProductResp> hots;
 
-    private List benefits= new ArrayList<>();
+    @ApiModelProperty("打折促销")
+    private List<ProductResp> benefits;
 
-    private List lovelys= new ArrayList<>();
+    @ApiModelProperty("广告位")
+    private List lovelys;
 
-    private List menus= new ArrayList<>();
+    @ApiModelProperty("菜单栏")
+    private List<MenuResp> menus;
 
-    private List likes= new ArrayList<>();
+    @ApiModelProperty("猜你喜欢")
+    private List<ProductResp> likes;
 }
