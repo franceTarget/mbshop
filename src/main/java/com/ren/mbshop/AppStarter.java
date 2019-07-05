@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 
 @SpringBootApplication
-@MapperScan(basePackages = { "com.ren.mbshop.dao" })
+@MapperScan("com.ren.mbshop.dao")
 @EnableCaching
 public class AppStarter {
 	public static void main(String[] args) {
