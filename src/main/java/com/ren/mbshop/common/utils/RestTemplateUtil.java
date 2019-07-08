@@ -116,11 +116,11 @@ public class RestTemplateUtil {
         if (CollectionUtil.isNotEmpty(params)) {
             paramsURL.append("?");
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                paramsURL.append("&" + entry.getKey() + "=" + entry.getValue());
+                paramsURL.append(entry.getKey() + "=" + entry.getValue() + "&");
             }
             // 字符数据最好encoding一下;这样一来，某些特殊字符才能传过去(如:flag的参数值就是“&”,不encoding的话,传不过去)
             try {
-                paramsURL.append("&flag=" + URLEncoder.encode("&", "utf-8"));
+                paramsURL.append("flag=" + URLEncoder.encode("&", "utf-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

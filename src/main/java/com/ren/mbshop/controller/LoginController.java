@@ -54,7 +54,6 @@ public class LoginController {
         params.put("js_code", req.getCode());
         params.put("grant_type", "authorization_code");
 
-        url += req.getCode();
         RestHeader restHeader = new RestHeader();
         restHeader.setMediaType(MediaType.APPLICATION_JSON);
         String s = RestTemplateUtil.doGet(params, restHeader, url);
