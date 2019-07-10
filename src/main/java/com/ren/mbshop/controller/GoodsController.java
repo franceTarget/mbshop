@@ -1,11 +1,13 @@
 package com.ren.mbshop.controller;
 
 import com.ren.mbshop.common.response.Response;
+import com.ren.mbshop.pojo.resp.ReplyResp;
+import com.ren.mbshop.pojo.resp.product.ProductListResp;
+import com.ren.mbshop.pojo.resp.product.StoreInfoResp;
 import com.ren.mbshop.pojo.resp.product.ProductAttrResp;
 import com.ren.mbshop.pojo.resp.product.ProductDetailResp;
-import com.ren.mbshop.pojo.resp.ReplyResp;
-import com.ren.mbshop.pojo.resp.StoreInfoResp;
 import com.ren.mbshop.service.GoodsService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,6 +75,44 @@ public class GoodsController {
 
 
         return Response.ok("", productDetailResp);
+    }
+
+
+    @ApiOperation("获取产品分销二维码")
+    @GetMapping("/promotion/routine/code")
+    public Response<String> getRoutineCode(@RequestParam("uid") String uid) {
+        return Response.ok("", "https://daohang.qq.com");
+    }
+
+
+    @ApiOperation("获取产品分类")
+    @GetMapping("/pid/cate")
+    public Response<List<String>> getPidCate(@RequestParam("uid") String uid) {
+        List<String> list = new ArrayList<>();
+        list.add("包包");
+        list.add("鞋鞋");
+        return Response.ok("", list);
+    }
+
+    @ApiOperation("获取产品列表")
+    @GetMapping("/query/list")
+    public Response<List<String>> getProductList(@RequestParam("uid") String uid,
+                                                 @RequestParam(value = "sid",required = false,defaultValue = "") String sid,
+                                                 @RequestParam(value = "cid",required = false,defaultValue = "") String cid,
+                                                 @RequestParam(value = "priceOrder",required = false,defaultValue = "") String priceOrder,
+                                                 @RequestParam(value = "salesOrder",required = false,defaultValue = "") String salesOrder,
+                                                 @RequestParam(value = "news",required = false,defaultValue = "") String news,
+                                                 @RequestParam(value = "first",required = false,defaultValue = "1") Integer first,
+                                                 @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit) {
+        List<ProductListResp> list = new ArrayList<>();
+        ProductListResp resp = new ProductListResp();
+        resp.setId("111");
+        resp.setImage("../../images/sign-bg.jpg");
+        resp.setFicti(12);
+        resp.setSales(22);
+        resp.setPrice(1232.12);
+        resp.setStoreName("飞机杯");
+        return Response.ok("", list);
     }
 
 }
