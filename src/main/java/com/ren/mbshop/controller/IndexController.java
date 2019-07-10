@@ -4,7 +4,7 @@ import com.ren.mbshop.common.response.Response;
 import com.ren.mbshop.pojo.resp.BannerResp;
 import com.ren.mbshop.pojo.resp.IndexResp;
 import com.ren.mbshop.pojo.resp.MenuResp;
-import com.ren.mbshop.pojo.resp.ProductResp;
+import com.ren.mbshop.pojo.resp.product.ProductResp;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

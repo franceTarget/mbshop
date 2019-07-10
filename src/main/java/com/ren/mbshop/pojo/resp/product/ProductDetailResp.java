@@ -1,7 +1,11 @@
-package com.ren.mbshop.pojo.resp;
+package com.ren.mbshop.pojo.resp.product;
 
+import com.ren.mbshop.pojo.resp.ReplyResp;
+import com.ren.mbshop.pojo.resp.StoreInfoResp;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @Author: target
@@ -13,7 +17,8 @@ public class ProductDetailResp {
 
     private String similarity;
 
-    private String productAttr;
+    @ApiModelProperty("产品属性")
+    private List<ProductAttrResp> productAttr;
 
     private String productValue;
 

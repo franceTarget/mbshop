@@ -1,7 +1,8 @@
 package com.ren.mbshop.controller;
 
 import com.ren.mbshop.common.response.Response;
-import com.ren.mbshop.pojo.resp.ProductDetailResp;
+import com.ren.mbshop.pojo.resp.product.ProductAttrResp;
+import com.ren.mbshop.pojo.resp.product.ProductDetailResp;
 import com.ren.mbshop.pojo.resp.ReplyResp;
 import com.ren.mbshop.pojo.resp.StoreInfoResp;
 import com.ren.mbshop.service.GoodsService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -44,7 +44,19 @@ public class GoodsController {
         storeInfoResp.setUserCollect("user");
         productDetailResp.setStoreInfo(storeInfoResp);
 
-        productDetailResp.setProductAttr("puAtrr");
+
+        //商品属性
+        List<ProductAttrResp> productAttrResps = new ArrayList<>();
+
+        ProductAttrResp productAttrResp = new ProductAttrResp();
+        List<String> attrs = new ArrayList<>();
+        attrs.add("幸福跳动");
+        attrs.add("幸福深度");
+        productAttrResp.setAttr_values(attrs);
+        productAttrResps.add(productAttrResp);
+
+        productDetailResp.setProductAttr(productAttrResps);
+
         productDetailResp.setProductValue("pv12");
         //用户评论
         ReplyResp replyResp = new ReplyResp();

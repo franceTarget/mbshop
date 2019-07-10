@@ -1,5 +1,6 @@
 package com.ren.mbshop.pojo.resp;
 
+import com.ren.mbshop.pojo.resp.product.ProductResp;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
