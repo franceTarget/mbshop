@@ -2,10 +2,7 @@ package com.ren.mbshop.controller;
 
 import com.ren.mbshop.common.response.Response;
 import com.ren.mbshop.pojo.resp.ReplyResp;
-import com.ren.mbshop.pojo.resp.product.ProductListResp;
-import com.ren.mbshop.pojo.resp.product.StoreInfoResp;
-import com.ren.mbshop.pojo.resp.product.ProductAttrResp;
-import com.ren.mbshop.pojo.resp.product.ProductDetailResp;
+import com.ren.mbshop.pojo.resp.product.*;
 import com.ren.mbshop.service.GoodsService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,23 +84,41 @@ public class GoodsController {
 
     @ApiOperation("获取产品分类")
     @GetMapping("/pid/cate")
-    public Response<List<String>> getPidCate(@RequestParam("uid") String uid) {
-        List<String> list = new ArrayList<>();
-        list.add("包包");
-        list.add("鞋鞋");
+    public Response<List<CateResp>> getPidCate(@RequestParam("uid") String uid) {
+        List<CateResp> list = new ArrayList<>();
+        CateResp cateResp1 = new CateResp();
+        cateResp1.setId("1");
+        cateResp1.setCateName("包包");
+        CateResp cateResp2 = new CateResp();
+        cateResp2.setId("2");
+        cateResp2.setCateName("鞋鞋");
+        list.add(cateResp1);
+        list.add(cateResp2);
+        return Response.ok("", list);
+    }
+
+    @ApiOperation("获取分类列表")
+    @GetMapping("/query/cate/list")
+    public Response<List<CateResp>> getProductList(@RequestParam("id") String id) {
+        List<CateResp> list = new ArrayList<>();
+        CateResp resp1 = new CateResp();
+        resp1.setId("101");
+        resp1.setPid("1");
+        resp1.setCateName("小ck");
+        list.add(resp1);
         return Response.ok("", list);
     }
 
     @ApiOperation("获取产品列表")
     @GetMapping("/query/list")
-    public Response<List<String>> getProductList(@RequestParam("uid") String uid,
-                                                 @RequestParam(value = "sid",required = false,defaultValue = "") String sid,
-                                                 @RequestParam(value = "cid",required = false,defaultValue = "") String cid,
-                                                 @RequestParam(value = "priceOrder",required = false,defaultValue = "") String priceOrder,
-                                                 @RequestParam(value = "salesOrder",required = false,defaultValue = "") String salesOrder,
-                                                 @RequestParam(value = "news",required = false,defaultValue = "") String news,
-                                                 @RequestParam(value = "first",required = false,defaultValue = "1") Integer first,
-                                                 @RequestParam(value = "limit",required = false,defaultValue = "10") Integer limit) {
+    public Response<List<ProductListResp>> getProductList(@RequestParam("uid") String uid,
+                                                 @RequestParam(value = "sid", required = false, defaultValue = "") String sid,
+                                                 @RequestParam(value = "cid", required = false, defaultValue = "") String cid,
+                                                 @RequestParam(value = "priceOrder", required = false, defaultValue = "") String priceOrder,
+                                                 @RequestParam(value = "salesOrder", required = false, defaultValue = "") String salesOrder,
+                                                 @RequestParam(value = "news", required = false, defaultValue = "") String news,
+                                                 @RequestParam(value = "first", required = false, defaultValue = "1") Integer first,
+                                                 @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
         List<ProductListResp> list = new ArrayList<>();
         ProductListResp resp = new ProductListResp();
         resp.setId("111");
@@ -111,7 +126,8 @@ public class GoodsController {
         resp.setFicti(12);
         resp.setSales(22);
         resp.setPrice(1232.12);
-        resp.setStoreName("飞机杯");
+        resp.setStoreName("酒神包");
+        list.add(resp);
         return Response.ok("", list);
     }
 
