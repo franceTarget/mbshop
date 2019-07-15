@@ -48,10 +48,18 @@ public class GoodsController {
         List<ProductAttrResp> productAttrResps = new ArrayList<>();
 
         ProductAttrResp productAttrResp = new ProductAttrResp();
-        List<String> attrs = new ArrayList<>();
-        attrs.add("幸福跳动");
-        attrs.add("幸福深度");
-        productAttrResp.setAttr_values(attrs);
+        List<ProductAttrValueResp> attrs = new ArrayList<>();
+        ProductAttrValueResp productAttrValueResp1 = new ProductAttrValueResp();
+        productAttrValueResp1.setAttr("幸福跳动");
+
+        ProductAttrValueResp productAttrValueResp2 = new ProductAttrValueResp();
+        productAttrValueResp2.setAttr("幸福深度");
+
+        productAttrResp.setAttrName("不知名");
+        attrs.add(productAttrValueResp1);
+        attrs.add(productAttrValueResp2);
+        productAttrResp.setAttr_value(attrs);
+
         productAttrResps.add(productAttrResp);
 
         productDetailResp.setProductAttr(productAttrResps);
@@ -112,13 +120,13 @@ public class GoodsController {
     @ApiOperation("获取产品列表")
     @GetMapping("/query/list")
     public Response<List<ProductListResp>> getProductList(@RequestParam("uid") String uid,
-                                                 @RequestParam(value = "sid", required = false, defaultValue = "") String sid,
-                                                 @RequestParam(value = "cid", required = false, defaultValue = "") String cid,
-                                                 @RequestParam(value = "priceOrder", required = false, defaultValue = "") String priceOrder,
-                                                 @RequestParam(value = "salesOrder", required = false, defaultValue = "") String salesOrder,
-                                                 @RequestParam(value = "news", required = false, defaultValue = "") String news,
-                                                 @RequestParam(value = "first", required = false, defaultValue = "1") Integer first,
-                                                 @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
+                                                          @RequestParam(value = "sid", required = false, defaultValue = "") String sid,
+                                                          @RequestParam(value = "cid", required = false, defaultValue = "") String cid,
+                                                          @RequestParam(value = "priceOrder", required = false, defaultValue = "") String priceOrder,
+                                                          @RequestParam(value = "salesOrder", required = false, defaultValue = "") String salesOrder,
+                                                          @RequestParam(value = "news", required = false, defaultValue = "") String news,
+                                                          @RequestParam(value = "first", required = false, defaultValue = "1") Integer first,
+                                                          @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
         List<ProductListResp> list = new ArrayList<>();
         ProductListResp resp = new ProductListResp();
         resp.setId("111");

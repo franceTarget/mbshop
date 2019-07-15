@@ -7,5 +7,7 @@ import java.util.List;
 @Data
 public class ProductAttrResp {
 
-    private List<String> attr_values;
+    private String attrName;
+
+    private List<ProductAttrValueResp> attr_value;
 }
