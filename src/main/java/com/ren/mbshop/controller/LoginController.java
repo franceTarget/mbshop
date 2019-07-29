@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.ren.mbshop.common.response.Response;
 import com.ren.mbshop.common.response.RestHeader;
 import com.ren.mbshop.common.utils.AesCbcUtil;
-import com.ren.mbshop.common.utils.FileUtil;
 import com.ren.mbshop.common.utils.RestTemplateUtil;
 import com.ren.mbshop.common.utils.StringUtil;
 import com.ren.mbshop.pojo.model.SysConfig;

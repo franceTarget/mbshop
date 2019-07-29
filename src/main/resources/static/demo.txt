@@ -1,0 +1,112 @@
+@ApiOperation("注册查询导出")
+    @GetMapping(value = "/supplier/register/export", produces = "application/json")
+    public Response<Boolean> queryRegisterList(
+        @ApiParam(value = "企业名称，模糊查询") @RequestParam(value = "companyName", required = false) String companyName,
+        @ApiParam(value = "金融状态") @RequestParam(value = "factoringState", required = false) String factoringState,
+        @ApiParam(value = "发票状态") @RequestParam(value = "invoiceState", required = false) String invoiceState,
+        @ApiParam(value = "所属平台，服务类型") @RequestParam(value = "platform", required = false) String platform,
+        @ApiParam(value = "数据来源") @RequestParam(value = "source", required = false) String source,
+        @ApiParam(value = "运营人员ID") @RequestParam(value = "operatorId", required = false) String operatorId,
+        @ApiParam(value = "电子数据") @RequestParam(value = "electData", required = false) String electData,
+        @ApiParam(value = "统一信用代码") @RequestParam(value = "creditCode", required = false) String creditCode,
+        @ApiParam(value = "归档编号") @RequestParam(value = "filingNum", required = false) String filingNum,
+        @ApiParam(value = "反馈信息") @RequestParam(value = "feedBack", required = false) String feedBack,
+        @ApiParam(value = "开始时间") @RequestParam(value = "start", required = false) Date start,
+        @ApiParam(value = "结束时间") @RequestParam(value = "end", required = false) Date end,
+        @ApiParam(value = "注册类型") @RequestParam(value = "registerType", required = false) Integer registerType,
+        @RequestParam(value = "token") String token,
+        HttpServletResponse response) {
+        Response<User> userByToken = userServiceApi.getUserByToken(token);
+        if (userByToken == null || userByToken.getCode() != 1) {
+            response.setStatus(401);
+            return Response.failed("请求未授权");
+        }
+
+        List<CompanyManagerListResp> list = supplierRegisterApi.getCompanyManagerList(companyName,
+            factoringState, invoiceState, platform, source, operatorId, electData, creditCode,
+            filingNum, feedBack, start, end, registerType).getData();
+        String title = "注册变更管理";
+        Object[] objs = null;
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        String[] rowsName = {"序号", "企业名称", "服务类型", "状态", "反馈结果", "注册类型",
+            "运营人员", "归档编号", "数据来源", "统一社会信用代码", "创建时间", "电子资料"};
+        int num = 1;
+        for (CompanyManagerListResp li : list) {
+            objs = new Object[rowsName.length];
+            objs[0] = num++;
+            objs[1] = li.getName();
+            objs[2] = li.getPlatformValue();
+            objs[3] = li.getProcessStateName();
+            objs[4] = li.getFeedBackValue();
+            objs[5] = li.getRegisterTypeValue();
+            objs[6] = li.getOperatorName();
+            objs[7] = li.getFilingNum();
+            objs[8] = li.getSourceValue();
+            objs[9] = li.getCreditCode();
+            objs[10] = li.getCreateTime();
+            objs[11] = li.getElectDataValue();
+            dataList.add(objs);
+        }
+        ExcelExportUtil ex = new ExcelExportUtil(title, rowsName, dataList);
+        try {
+            ex.export(response);
+            return Response.ok("导出成功", true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Response.failed("导出失败");
+    }
+
+
+    @ApiOperation("供应商代理注册表格导入")
+    @PostMapping("supplier/register/import")
+    public Response<Boolean> importSupplierInfo(
+        @RequestParam(value = "filename") MultipartFile file) {
+
+        //判断文件是否为空
+        if (file == null) {
+            return Response.failed("文件不存在");
+        }
+        //获取文件名称
+        String fileName = file.getOriginalFilename();
+
+        //验证文件名是否合格
+        if (!ExcelUtil.validateExcel(fileName)) {
+            return Response.failed("文件格式错误");
+        }
+        //判断文件内容是否为空
+        long size = file.getSize();
+        if (StringUtil.isEmpty(fileName) || size == 0) {
+            return Response.failed("文件内容不可为空");
+        }
+
+        InputStream inputStream = null;
+        //根据版本选择创建Workbook的方式
+        Workbook wb = null;
+        //获取供应商信息集合
+        List<SupplierImportVO> list;
+        try {
+            inputStream = file.getInputStream();
+            //根据文件名判断文件是2003版本还是2007版本
+            if (ExcelUtil.isExcel2007(file.getOriginalFilename())) {
+                wb = new XSSFWorkbook(inputStream);
+            } else {
+                wb = new HSSFWorkbook(inputStream);
+            }
+            list = DealExcelUtil.getSupplierInfo(wb);
+        }
+        catch (Exception e) {
+            return Response.failed(e.getMessage());
+        }
+        if (wb == null) {
+            return Response.failed("导入模板错误，请使用正确的模板！");
+        }
+
+        SupplierImportReq req = new SupplierImportReq();
+        req.setList(list);
+        req.setUsername(LoginUserHolder.getUsername());
+        req.setUserId(LoginUserHolder.getUserId());
+        return supplierRegisterApi.importSupplierInfo(req);
+    }

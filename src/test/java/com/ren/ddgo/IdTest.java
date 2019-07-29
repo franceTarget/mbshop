@@ -31,4 +31,13 @@ public class IdTest {
         System.out.println(now.get(Calendar.MONTH) + 1);
         System.out.println(now.get(Calendar.DAY_OF_MONTH));
     }
+
+    @Test
+    public void test4() {
+        Map<String,String> map = new HashMap<>(0);
+        String s = JSONObject.toJSONString(map);
+        System.out.println(s);
+        String s1 = JSONObject.toJSONString(null);
+        System.out.println(s1);
+    }
 }
