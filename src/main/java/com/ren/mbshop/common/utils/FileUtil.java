@@ -33,9 +33,7 @@ public class FileUtil {
      * KeepDirStructure  true:保留目录结构;false:所有文件跑到压缩包根目录下
      **/
     public static void toZip(String fileDir, OutputStream outStream, int level, boolean KeepDirStructure) throws RuntimeException {
-        ZipOutputStream zos = null;
-        try {
-            zos = new ZipOutputStream(outStream);
+        try (ZipOutputStream zos = new ZipOutputStream(outStream)) {
             //设置压缩级别 （1（压缩快，压缩比不高）- 9（压缩慢，压缩比高））
             if (level != 0) {
                 zos.setLevel(level);
@@ -45,16 +43,7 @@ public class FileUtil {
             compress(sourceFile, zos, sourceFile.getName(), KeepDirStructure);
         } catch (Exception e) {
             throw new RuntimeException("zip error from ZipUtils", e);
-        } finally {
-            if (zos != null) {
-                try {
-                    zos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-
     }
 
     /**
@@ -273,52 +262,28 @@ public class FileUtil {
         if (StringUtils.isBlank(fileName) || file == null || StringUtils.isBlank(uri)) {
             return;
         }
-
-        BufferedOutputStream fos = null;
-        InputStream in = null;
-        BufferedInputStream buf = null;
+        File temp0 = createDifferentName(fileName, file);
+        URLConnection conn = null;
         try {
-            File temp0 = createDifferentName(fileName, file);
             temp0.createNewFile();
-            //用BufferedOutputStream处理
-            fos = new BufferedOutputStream(new FileOutputStream(temp0));
             //拿到文件流
             URL url = new URL(uri);
-            URLConnection conn = url.openConnection();
-            in = conn.getInputStream();
-            buf = new BufferedInputStream(in);
+            conn = url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //用BufferedOutputStream处理
+        try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(temp0));
+             InputStream in = conn.getInputStream();) {
             int len = -1;
             byte[] b = new byte[1024];
             while ((len = in.read(b)) != -1) {
                 fos.write(b, 0, len);
             }
-
-        } catch (Exception e) {
-            log.error("Failed to download file, uri is " + uri, e);
-
-        } finally {
-            if (buf != null) {
-                try {
-                    buf.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

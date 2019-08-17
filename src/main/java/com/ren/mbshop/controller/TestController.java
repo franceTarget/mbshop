@@ -47,18 +47,20 @@ public class TestController {
 
         FileUtil.write("new1.txt", txtDir, "http://localhost:8800/demo.txt");
         FileUtil.write("new2.sql", sqlDir, "http://localhost:8800/test.sql");
+
         //压缩的文件暂放在临时目录
-        try {
-            FileUtil.toZip(rootDir.getPath(), new FileOutputStream(zipDir), true);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(zipDir)) {
+            FileUtil.toZip(rootDir.getPath(), fileOutputStream, true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        try {
-            // 以流的形式下载文件。
-            InputStream fis = new BufferedInputStream(new FileInputStream(zipDir));
+
+        try (InputStream fis = new BufferedInputStream(new FileInputStream(zipDir));
+             OutputStream toClient = new BufferedOutputStream(response.getOutputStream())) {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
-            fis.close();
             // 清空response
             response.reset();
             // 设置response的Header
@@ -66,14 +68,15 @@ public class TestController {
             String fileName2 = new String(fileName1.getBytes(), "ISO-8859-1");
             response.addHeader("Content-Disposition", "attachment;filename=" + fileName2);
             response.addHeader("Content-Length", "" + zipDir.length());
-            OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
             response.setContentType("application/octet-stream");
             toClient.write(buffer);
             toClient.flush();
-            toClient.close();
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             zipDir.delete();
-            log.error("compress zip fail:", e);
+            FileUtil.deleteDir(rootDir);
+        } catch (IOException e) {
+            zipDir.delete();
+            FileUtil.deleteDir(rootDir);
         } finally {
             zipDir.delete();
             FileUtil.deleteDir(rootDir);
