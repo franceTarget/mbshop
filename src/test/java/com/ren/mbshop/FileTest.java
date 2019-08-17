@@ -1,4 +1,4 @@
-package com.ren.ddgo;
+package com.ren.mbshop;
 
 import org.junit.Test;
 

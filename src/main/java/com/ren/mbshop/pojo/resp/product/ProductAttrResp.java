@@ -9,5 +9,5 @@ public class ProductAttrResp {
 
     private String attrName;
 
-    private List<ProductAttrValueResp> attr_value;
+    private List<ProductAttrValueResp> attr_values;
 }

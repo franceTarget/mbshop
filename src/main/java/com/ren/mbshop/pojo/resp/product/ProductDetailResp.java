@@ -19,7 +19,7 @@ public class ProductDetailResp {
     @ApiModelProperty("产品属性")
     private List<ProductAttrResp> productAttr;
 
-    private String productValue;
+    private List<ProductResp> productValue;
 
     private ReplyResp reply;
 

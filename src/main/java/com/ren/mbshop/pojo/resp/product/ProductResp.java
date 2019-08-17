@@ -24,4 +24,8 @@ public class ProductResp {
     @ApiModelProperty("商品剩余数量")
     private Integer stock;
 
+    private String unique;
+
+    private String suk;
+
 }

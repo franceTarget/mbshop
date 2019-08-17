@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 public class StoreInfoResp {
 
+    private String unique;
+
     @ApiModelProperty("关键字说明")
     private String keyword;
 

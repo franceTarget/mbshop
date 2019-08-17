@@ -1,4 +1,4 @@
-package com.ren.ddgo;
+package com.ren.mbshop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ren.mbshop.common.utils.SnowflakeIdWorker;

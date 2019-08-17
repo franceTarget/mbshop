@@ -5,6 +5,7 @@ import com.ren.mbshop.pojo.resp.ReplyResp;
 import com.ren.mbshop.pojo.resp.product.*;
 import com.ren.mbshop.service.GoodsService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
@@ -41,6 +43,7 @@ public class GoodsController {
         storeInfoResp.setOtPrice(369.00);
         storeInfoResp.setStoreName("飞机杯");
         storeInfoResp.setUserCollect("user");
+        storeInfoResp.setUnique("s12");
         productDetailResp.setStoreInfo(storeInfoResp);
 
 
@@ -58,13 +61,21 @@ public class GoodsController {
         productAttrResp.setAttrName("不知名");
         attrs.add(productAttrValueResp1);
         attrs.add(productAttrValueResp2);
-        productAttrResp.setAttr_value(attrs);
+        productAttrResp.setAttr_values(attrs);
 
         productAttrResps.add(productAttrResp);
 
         productDetailResp.setProductAttr(productAttrResps);
-
-        productDetailResp.setProductValue("pv12");
+        //商品值
+        List<ProductResp> productValues = new ArrayList<>();
+        ProductResp productResp = new ProductResp();
+        productResp.setSuk("nb,hao");
+        productResp.setUnique("s12");
+        productResp.setPrice(1231.2);
+        productResp.setImage("../../images/sign-bg.jpg");
+        productResp.setStock(12);
+        productValues.add(productResp);
+        productDetailResp.setProductValue(productValues);
         //用户评论
         ReplyResp replyResp = new ReplyResp();
         replyResp.setAvatar("../../images/sign-bg.jpg");
@@ -139,4 +150,12 @@ public class GoodsController {
         return Response.ok("", list);
     }
 
+
+    @ApiOperation("获取所选产品")
+    @GetMapping("/query/formId")
+    public Response<Integer> getProductList(@RequestParam("uid") String uid,
+                                            @RequestParam("formId") String formId) {
+        log.info("请求id {}", formId);
+        return Response.ok("查询成功", 100);
+    }
 }

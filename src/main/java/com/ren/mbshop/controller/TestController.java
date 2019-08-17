@@ -1,5 +1,6 @@
 package com.ren.mbshop.controller;
 
+import com.ren.mbshop.common.response.Response;
 import com.ren.mbshop.common.utils.FileUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,8 @@ public class TestController {
 
     @ApiOperation("下载测试")
     @GetMapping("/download")
-    public HttpServletResponse downloadAssetFile(HttpServletRequest request,
-                                                 HttpServletResponse response) throws IOException {
+    public Response downloadAssetFile(HttpServletRequest request,
+                                      HttpServletResponse response) {
 //        List<String> filePaths = new ArrayList<>();
 //
 //        filePaths.add("http://localhost:8800/demo.txt");
@@ -30,25 +31,29 @@ public class TestController {
 
         //压缩包
         File zipDir = null;
-        //根目录
-        File rootDir = null;
+
         try {
-
             zipDir = File.createTempFile(String.valueOf(new Random().nextInt(10000)), ".zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //根目录
+        File rootDir = FileUtil.createDir(fileName, null);
 
-            rootDir = FileUtil.createDir(fileName, null);
+        //创建txt文件夹
+        File txtDir = FileUtil.createDir("文本文件", rootDir);
+        //创建sql文件夹
+        File sqlDir = FileUtil.createDir("sql文件", rootDir);
 
-            //创建txt文件夹
-            File txtDir = FileUtil.createDir("文本文件", rootDir);
-            //创建sql文件夹
-            File sqlDir = FileUtil.createDir("sql文件", rootDir);
-
-            FileUtil.write("new1.txt", txtDir, "http://localhost:8800/demo.txt");
-            FileUtil.write("new2.sql", sqlDir, "http://localhost:8800/test.sql");
-
-            //压缩的文件暂放在临时目录
+        FileUtil.write("new1.txt", txtDir, "http://localhost:8800/demo.txt");
+        FileUtil.write("new2.sql", sqlDir, "http://localhost:8800/test.sql");
+        //压缩的文件暂放在临时目录
+        try {
             FileUtil.toZip(rootDir.getPath(), new FileOutputStream(zipDir), true);
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
             // 以流的形式下载文件。
             InputStream fis = new BufferedInputStream(new FileInputStream(zipDir));
             byte[] buffer = new byte[fis.available()];
@@ -73,6 +78,6 @@ public class TestController {
             zipDir.delete();
             FileUtil.deleteDir(rootDir);
         }
-        return response;
+        return Response.ok("下载成功");
     }
 }

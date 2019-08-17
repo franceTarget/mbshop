@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@ControllerAdvice(basePackages = "com.ren.ddgo.controller")
+@ControllerAdvice(basePackages = "com.ren.mbshop.controller")
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(RuntimeException.class)
